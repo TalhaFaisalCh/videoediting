@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import os
 
+file_name = input('Name your video: ')+'.mp4'
 
 # strictly say 'y'(doesn't matter if its capital or not) if you want to video reverse 
 choice = input("reverse the video?[Y/N]: ").upper()
@@ -15,15 +16,17 @@ coloredvideo = True
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 # If you want to enable change size, replace frame_width and frame_height with the program infront of it and enable it by removing '#'
-new_width = frame_width #int(input('Width >>>'))
-new_height = frame_height #int(input('Height >>>'))
+new_width = frame_width #int(input('Width: '))
+new_height = frame_height #int(input('Height: '))
 # Define the codec and create VideoWriter object (fourcc == Four character code) 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-# If you want to specify a path, add to filename.mp4 e.g D:\folder\filename.mp4
-out = cv2.VideoWriter('pythonvideo.mp4', 
+
+# If you want to specify a path, add to filename variable e.g D:\folder\filename.mp4
+out = cv2.VideoWriter(file_name,  
                       fourcc, 30.0, (new_width, new_height), isColor=coloredvideo)
 
 print(new_width, new_height)
+
 list_frame = []
 while True:
     ret, frame = cam.read()
@@ -37,7 +40,7 @@ while True:
     list_frame.append(resized_image)
 
     # Display the captured frame
-    cv2.imshow('Video', resized_image)
+    cv2.imshow(file_name, resized_image)
 
     # Press 'q' to exit the loop
     if cv2.waitKey(1) == ord('q'):
@@ -58,9 +61,8 @@ if reverse:
 for i in range(start, end, step):
     out.write(list_frame[i])
 
-# If you want to have a specific path, go to line 22 and disable the print statement below with '#' at beginning
-print('Video stored at: ', os.getcwd())
-
+# If you want to have a specific path, go to line 25 and disable the print statement below with '#' at beginning
+print('Video saved at',os.getcwd() + '\\' + file_name)
 
 # Release the capture and writer objects
 cam.release()
